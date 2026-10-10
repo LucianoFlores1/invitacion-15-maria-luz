@@ -45,10 +45,9 @@
         <div class="bg-gradient"></div>
       </div>
       
-      <!-- Audio (Chopin - Nocturne Op.9 No.2) Guaranteed to work -->
-      <audio id="bg-music" loop>
-        <source src="https://upload.wikimedia.org/wikipedia/commons/4/4b/Chopin_-_Nocturne_op_9_No_2.ogg" type="audio/ogg">
-      </audio>
+      <!-- YouTube API for Background Music (Tiempo de Vals) -->
+      <script src="https://www.youtube.com/iframe_api"></script>
+      <div id="youtube-player" style="position: absolute; width:0; height:0; display: none;"></div>
 
       <!-- Juicy Music Toggle -->
       <button class="music-toggle juicy-btn" id="music-toggle" aria-label="Reproducir música">
@@ -222,30 +221,65 @@
         </div>
       </section>
 
-      <!-- GIFTS / REGALOS (Full Width Gold Flow) -->
-      <section class="section full-width-section gift-flow">
-        <div class="flow-content stagger-item">
-          <div class="large-icon" style="color:#010409; background:rgba(255,255,255,0.4);"><i class="ph-fill ph-gift"></i></div>
-          <h4 class="flow-heading" style="color:#010409;">Obsequios</h4>
-          <p class="flow-text" style="color:#010409; opacity: 0.9;">Tu presencia es mi mayor regalo. Si piensas en un obsequio, en la entrada habrá un cofre, o si preferís te dejo mi alias:</p>
-          <div class="alias-box">
+      <!-- GIFTS / REGALOS (Full Width Velvet Gold Flow) -->
+      <section class="section full-width-section gift-flow" id="gifts">
+        <div class="gift-particles"></div>
+        <div class="flow-content stagger-item premium-glass-card">
+          <div class="large-icon juicy-element" style="color:#d4af37; background:rgba(212,175,55,0.1); border: 1px solid rgba(212,175,55,0.4); box-shadow: inset 0 0 15px rgba(212,175,55,0.2);"><i class="ph-fill ph-gift"></i></div>
+          <h4 class="flow-heading" style="color:#d4af37; font-size: 2.2rem;">Obsequios</h4>
+          <p class="flow-text" style="color:rgba(255,255,255,0.95); font-size: 1.05rem; line-height: 1.8;">Tu presencia es mi mayor regalo. Si deseas hacerme un obsequio, en el salón habrá un buzón. O si preferís, podés ayudarme con mis sueños a través de mi alias:</p>
+          
+          <div class="alias-box juicy-element">
             maria.658.1822
           </div>
-          <button id="copy-alias-btn" class="btn btn-outline juicy-btn" style="border-color: rgba(0,0,0,0.5); color: #000; box-shadow: none;">
+          <button id="copy-alias-btn" class="btn btn-outline juicy-btn" style="border-color: rgba(212,175,55,0.5); color: #d4af37; background: rgba(212,175,55,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
             <i class="ph-bold ph-copy"></i> Copiar Alias
           </button>
         </div>
       </section>
 
-      <!-- RSVP (Full Width WhatsApp Flow) -->
+      <!-- RSVP (Full Width WhatsApp Flow - Vanilla JS form) -->
       <section class="section full-width-section rsvp-flow">
         <div class="flow-content stagger-item">
-          <i class="ph-fill ph-envelope-open rsvp-icon juicy-element" style="color: #25D366;"></i>
-          <h3 class="section-title" style="color: #fff;">Confirma tu Asistencia</h3>
-          <p class="flow-text" style="color:rgba(255,255,255,0.8); margin-bottom: 2rem;">Tu presencia es el mejor regalo. Por favor confirmar antes del 10 de Octubre.</p>
-          <a href="https://wa.me/5493874824080?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%2015%20de%20Mar%C3%ADa%20Luz!" target="_blank" class="btn btn-whatsapp juicy-btn">
-            <i class="ph-fill ph-whatsapp-logo"></i> Confirmar Asistencia
-          </a>
+          <div class="rsvp-icon-wrapper juicy-element" style="margin-bottom: 1.5rem;">
+            <i class="ph-fill ph-envelope-open" style="color: #d4af37; font-size: 3.5rem;"></i>
+          </div>
+          <h3 class="flow-heading" style="color: #fff; font-size: 2.4rem; line-height: 1.1;">Confirmá tu asistencia</h3>
+          <p class="flow-text" style="color:rgba(255,255,255,0.8); margin-bottom: 2.5rem; font-size: 1.05rem;">Me haría muy feliz que estés. Por favor confirmá antes del 10 de Octubre.</p>
+          
+          <form id="rsvp-form" class="rsvp-form">
+            <div class="form-group" id="group-nombre">
+              <label for="rsvp-nombre">Nombre y apellido</label>
+              <input type="text" id="rsvp-nombre" class="form-input" placeholder="Ej: Juan Pérez" autocomplete="name">
+              <span class="error-msg" id="rsvp-error"></span>
+            </div>
+
+            <div class="form-group row-group">
+              <label>¿Cuántos van, contándote?</label>
+              <div class="counter-box">
+                <button type="button" id="btn-minus" class="counter-btn" disabled><i class="ph-bold ph-minus"></i></button>
+                <div class="counter-value-wrapper">
+                  <span id="rsvp-count" class="counter-value">1</span>
+                </div>
+                <button type="button" id="btn-plus" class="counter-btn"><i class="ph-bold ph-plus"></i></button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-mensaje">Un mensaje para María Luz <span style="font-weight: 400; opacity: 0.7;">(opcional)</span></label>
+              <textarea id="rsvp-mensaje" class="form-input" rows="3" placeholder="¡Qué emoción!"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-whatsapp juicy-btn" style="margin-top: 1rem; width: 100%; border-radius: 100px; font-size: 1.1rem; padding: 1.2rem;">
+              <i class="ph-fill ph-whatsapp-logo" style="font-size: 1.5rem;"></i> Confirmar por WhatsApp
+            </button>
+          </form>
+
+          <div id="rsvp-success" class="rsvp-success" style="display: none; text-align: center; background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+            <h4 style="font-family: var(--font-sans); font-weight: 800; font-size: 1.8rem; color: #fff;">¡Nos vemos en la pista!</h4>
+            <p style="color: var(--text-muted); margin-top: 1rem; font-size: 1rem;">Se abrió WhatsApp con tu mensaje listo. Solo falta tocar enviar.</p>
+            <button type="button" id="btn-edit-rsvp" class="btn btn-outline juicy-btn" style="margin-top: 1.5rem; width: 100%;">Editar mi respuesta</button>
+          </div>
         </div>
       </section>
 

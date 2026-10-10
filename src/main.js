@@ -118,13 +118,22 @@ gsap.utils.toArray('.stagger-item').forEach(item => {
 // Sound Feedback & Entrance Overlay Logic
 // ----------------------------------------------------
 const musicToggle = document.getElementById('music-toggle')
-const bgMusic = document.getElementById('bg-music')
 const musicIcon = document.getElementById('music-icon')
 const musicIconOff = document.getElementById('music-icon-off')
 const enterBtn = document.getElementById('enter-btn')
 const overlay = document.getElementById('entrance-overlay')
 
 let isPlaying = false
+let ytPlayer = null;
+
+window.onYouTubeIframeAPIReady = function() {
+  ytPlayer = new YT.Player('youtube-player', {
+    height: '0',
+    width: '0',
+    videoId: 'x1WJ22hHk48', // Tiempo de Vals - Chayanne
+    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': 'x1WJ22hHk48' }
+  });
+};
 
 // Synthesize a magical chime sound effect offline using AudioContext
 function playMagicChime() {
@@ -159,12 +168,13 @@ enterBtn.addEventListener('click', () => {
   // Play the synthesized magic sound
   playMagicChime();
 
-  // Play background music (Chopin)
-  bgMusic.play().then(() => {
+  // Play YouTube background music (Tiempo de Vals)
+  if (ytPlayer && ytPlayer.playVideo) {
+    ytPlayer.playVideo();
     isPlaying = true;
     musicIcon.style.display = 'block';
     musicIconOff.style.display = 'none';
-  }).catch(err => console.log('Autoplay blocked or URL failed:', err));
+  }
 
   enterBtn.classList.add('hide');
   document.getElementById('envelope-flap').classList.add('open');
@@ -182,18 +192,20 @@ enterBtn.addEventListener('click', () => {
 })
 
 musicToggle.addEventListener('click', () => {
+  if (!ytPlayer || !ytPlayer.playVideo) return;
+  
   if (isPlaying) {
-    bgMusic.pause()
-    musicIcon.style.display = 'none'
-    musicIconOff.style.display = 'block'
+    ytPlayer.pauseVideo();
+    musicIcon.style.display = 'none';
+    musicIconOff.style.display = 'block';
   } else {
-    bgMusic.play()
-    musicIcon.style.display = 'block'
-    musicIconOff.style.display = 'none'
+    ytPlayer.playVideo();
+    musicIcon.style.display = 'block';
+    musicIconOff.style.display = 'none';
   }
-  isPlaying = !isPlaying
-  gsap.fromTo(musicToggle, { scale: 0.7 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
-})
+  isPlaying = !isPlaying;
+  gsap.fromTo(musicToggle, { scale: 0.7 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
+});
 
 // ----------------------------------------------------
 // Countdown Logic
@@ -243,4 +255,83 @@ if (copyAliasBtn) {
       })
     })
   })
+}
+
+// ----------------------------------------------------
+// RSVP Form Logic
+// ----------------------------------------------------
+const rsvpForm = document.getElementById('rsvp-form');
+const rsvpSuccess = document.getElementById('rsvp-success');
+const btnMinus = document.getElementById('btn-minus');
+const btnPlus = document.getElementById('btn-plus');
+const countDisplay = document.getElementById('rsvp-count');
+const inputNombre = document.getElementById('rsvp-nombre');
+const inputMensaje = document.getElementById('rsvp-mensaje');
+const errorMsg = document.getElementById('rsvp-error');
+const btnEdit = document.getElementById('btn-edit-rsvp');
+
+if (rsvpForm) {
+  let personasCount = 1;
+
+  btnMinus.addEventListener('click', () => {
+    if (personasCount > 1) {
+      personasCount--;
+      countDisplay.textContent = personasCount;
+      if (personasCount === 1) btnMinus.disabled = true;
+      btnPlus.disabled = false;
+      gsap.fromTo(countDisplay, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.5)' });
+    }
+  });
+
+  btnPlus.addEventListener('click', () => {
+    if (personasCount < 10) {
+      personasCount++;
+      countDisplay.textContent = personasCount;
+      btnMinus.disabled = false;
+      if (personasCount === 10) btnPlus.disabled = true;
+      gsap.fromTo(countDisplay, { scale: 1.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.3, ease: 'back.out(1.5)' });
+    }
+  });
+
+  rsvpForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = inputNombre.value.trim();
+    if (nombre.length < 2) {
+      errorMsg.textContent = 'Contanos tu nombre para saber quién confirma.';
+      inputNombre.classList.add('error');
+      gsap.fromTo(inputNombre, { x: -8 }, { x: 8, yoyo: true, repeat: 3, duration: 0.08, ease: 'power1.inOut' });
+      return;
+    }
+    errorMsg.textContent = '';
+    inputNombre.classList.remove('error');
+
+    let mensajeTexto = `¡Hola! Soy ${nombre} y confirmo mi asistencia a los XV de María Luz.\nPersonas: ${personasCount}`;
+    const mensajeExtra = inputMensaje.value.trim();
+    if (mensajeExtra) {
+      mensajeTexto += `\n\nMensaje para María Luz: ${mensajeExtra}`;
+    }
+
+    window.open(`https://wa.me/5493874824080?text=${encodeURIComponent(mensajeTexto)}`, '_blank', 'noopener');
+    
+    // Confetti
+    import('canvas-confetti').then((confetti) => {
+      const opts = { particleCount: 110, spread: 80, startVelocity: 50, colors: ['#1d44c4', '#4f7cf0', '#9dbcff', '#ffffff', '#c9d8ff'], shapes: ['star', 'circle'], disableForReducedMotion: true, zIndex: 10000 };
+      confetti.default({ ...opts, angle: 60, origin: { x: 0, y: 0.85 } });
+      confetti.default({ ...opts, angle: 120, origin: { x: 1, y: 0.85 } });
+    });
+
+    gsap.to(rsvpForm, { opacity: 0, height: 0, duration: 0.4, onComplete: () => {
+      rsvpForm.style.display = 'none';
+      rsvpSuccess.style.display = 'block';
+      gsap.fromTo(rsvpSuccess, { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.5)' });
+    }});
+  });
+
+  btnEdit.addEventListener('click', () => {
+    gsap.to(rsvpSuccess, { opacity: 0, height: 0, duration: 0.3, onComplete: () => {
+      rsvpSuccess.style.display = 'none';
+      rsvpForm.style.display = 'flex';
+      gsap.fromTo(rsvpForm, { opacity: 0, height: 0 }, { opacity: 1, height: 'auto', duration: 0.4 });
+    }});
+  });
 }
