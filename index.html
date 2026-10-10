@@ -14,15 +14,22 @@
 </head>
 <body>
 
-  <!-- TAP TO ENTER OVERLAY (Fixes Autoplay & Scroll Issue) -->
+  <!-- PREMIUM ENVELOPE ENTRANCE OVERLAY -->
   <div id="entrance-overlay" class="entrance-overlay">
-    <div class="entrance-content">
-      <h1 class="entrance-name">María Luz</h1>
-      <p class="entrance-subtitle">Te invito a mis 15 años</p>
-      <button id="enter-btn" class="btn btn-outline juicy-btn mt-3">
-        <i class="ph-fill ph-envelope-open"></i> Abrir Invitación
+    <div class="envelope-container">
+      <div class="envelope-flap" id="envelope-flap"></div>
+      <div class="envelope-body">
+        <div class="envelope-content">
+          <h2 class="envelope-title">María Luz</h2>
+          <p class="envelope-subtitle">Mis 15 Años</p>
+        </div>
+      </div>
+      <!-- Wax Seal Button -->
+      <button id="enter-btn" class="wax-seal juicy-btn">
+        <span class="wax-seal-text">M</span>
       </button>
     </div>
+    <p class="tap-to-open">Toca el sello para abrir</p>
   </div>
 
   <div class="desktop-wrapper">
@@ -38,9 +45,9 @@
         <div class="bg-gradient"></div>
       </div>
       
-      <!-- Audio (Classic Waltz or 15th Birthday Pop) -->
+      <!-- Audio (Emotional Piano - Classic for 15s) -->
       <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=waltz-of-the-flowers-8291.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/11/06/audio_9bc57fb6c3.mp3?filename=emotional-piano-sad-background-music-for-videos-126317.mp3" type="audio/mpeg">
       </audio>
 
       <!-- Juicy Music Toggle -->

@@ -131,23 +131,29 @@ const overlay = document.getElementById('entrance-overlay')
 let isPlaying = false
 
 enterBtn.addEventListener('click', () => {
-  // Start Music (Now allowed because of user interaction)
+  // Start Music
   bgMusic.play().then(() => {
     isPlaying = true;
     musicIcon.style.display = 'block';
     musicIconOff.style.display = 'none';
   }).catch(err => console.log('Autoplay blocked:', err));
 
-  // Hide overlay, enable scroll
-  overlay.style.opacity = '0';
-  overlay.style.visibility = 'hidden';
-  document.body.style.overflow = 'auto'; // Unlock scroll
-  lenis.start(); // Unlock Lenis
-  
-  // Ensure we are at the top and play entrance animation
-  window.scrollTo(0,0);
-  createParticles();
-  playJuicyHeroAnimation();
+  // Animate Wax Seal and Envelope Flap
+  enterBtn.classList.add('hide');
+  document.getElementById('envelope-flap').classList.add('open');
+
+  // Wait for envelope animation to finish before hiding overlay
+  setTimeout(() => {
+    overlay.style.opacity = '0';
+    overlay.style.visibility = 'hidden';
+    document.body.style.overflow = 'auto'; // Unlock scroll
+    lenis.start(); // Unlock Lenis
+    
+    // Ensure we are at the top and play entrance animation
+    window.scrollTo(0,0);
+    createParticles();
+    playJuicyHeroAnimation();
+  }, 1200); // 1.2s delay for the envelope to reveal content
 })
 
 musicToggle.addEventListener('click', () => {

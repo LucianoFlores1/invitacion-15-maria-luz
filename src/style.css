@@ -28,24 +28,50 @@ body {
   overflow: hidden; /* Prevent scroll until overlay is clicked */
 }
 
-/* ENTRANCE OVERLAY */
+/* PREMIUM ENVELOPE ENTRANCE OVERLAY */
 .entrance-overlay {
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: radial-gradient(circle at center, #0a1128 0%, #010409 100%);
-  z-index: 10000;
-  display: flex; justify-content: center; align-items: center; text-align: center;
-  transition: opacity 0.8s ease, visibility 0.8s;
+  background: url('/bg-silk.jpg') center/cover no-repeat;
+  z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  transition: opacity 1s ease 0.5s, visibility 1s ease 0.5s;
 }
-.entrance-content {
-  display: flex; flex-direction: column; align-items: center; gap: 1rem;
+.entrance-overlay::before { content: ''; position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(1,4,9,0.7); backdrop-filter: blur(8px); }
+
+.envelope-container {
+  position: relative; width: 320px; height: 220px; background: rgba(15,23,42,0.9);
+  border: 1px solid rgba(212,175,55,0.4); border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.8), inset 0 0 30px rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center; z-index: 2;
 }
-.entrance-name {
-  font-family: var(--font-script); font-size: 5rem; color: var(--gold);
-  text-shadow: 0 0 20px rgba(212,175,55,0.4); line-height: 1; margin-bottom: -0.5rem;
+.envelope-flap {
+  position: absolute; top: 0; left: 0; width: 100%; height: 50%;
+  background: rgba(20,30,50,0.95); border-bottom: 1px solid rgba(212,175,55,0.5);
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: top; transition: transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 3;
 }
-.entrance-subtitle {
-  font-family: var(--font-sans); color: var(--text-muted); letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 1.5rem;
+.envelope-flap.open { transform: rotateX(180deg); }
+
+.envelope-content { text-align: center; opacity: 0; transition: opacity 0.5s; transform: translateY(20px); }
+.envelope-flap.open ~ .envelope-body .envelope-content { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
+
+.envelope-title { font-family: var(--font-script); font-size: 3.5rem; color: var(--gold); line-height: 1; text-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.envelope-subtitle { font-family: var(--font-sans); color: var(--gold-light); font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; margin-top: 0.5rem; }
+
+.wax-seal {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 60px; height: 60px; border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #e6c27a, #b38b22);
+  border: 2px solid #8c6a14; box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.5);
+  display: flex; justify-content: center; align-items: center; z-index: 4; cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
 }
+.wax-seal:hover { transform: translate(-50%, -50%) scale(1.1); }
+.wax-seal.hide { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.5); }
+.wax-seal-text { font-family: var(--font-script); font-size: 2rem; color: #594205; font-weight: bold; text-shadow: 1px 1px 2px rgba(255,255,255,0.4); }
+
+.tap-to-open { position: relative; z-index: 2; margin-top: 2rem; color: var(--gold-light); font-size: 0.9rem; letter-spacing: 0.1em; text-transform: uppercase; animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
 /* DESKTOP WRAPPER */
 .desktop-wrapper {
@@ -96,7 +122,7 @@ body {
 .particle { position: absolute; border-radius: 50%; background: var(--gold); box-shadow: 0 0 8px var(--gold); will-change: transform, opacity; }
 
 /* JUICY HERO SECTION */
-.hero { min-height: 100vh; position: relative; padding: 0; display: flex; flex-direction: column; justify-content: flex-end; z-index: 2; }
+.hero { min-height: 100vh; position: relative; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
 .hero-image-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%); will-change: transform; }
 .hero-silk-img { width: 100%; height: 100%; object-fit: cover; }
 .hero-vignette { position: absolute; top:0; left:0; width: 100%; height: 100%; background: radial-gradient(circle at center, transparent 30%, #010409 100%), linear-gradient(to bottom, transparent 60%, #010409 100%); }
