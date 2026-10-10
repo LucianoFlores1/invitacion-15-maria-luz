@@ -7,43 +7,20 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
   
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <link rel="stylesheet" href="/src/style.css">
 </head>
-<body class="loading">
-
-  <!-- SVG Noise Filter for Premium Texture -->
-  <svg style="display: none;">
-    <filter id="noise">
-      <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="3" stitchTiles="stitch" />
-      <feColorMatrix type="matrix" values="1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.08 0" />
-    </filter>
-  </svg>
-
-  <!-- Preloader -->
-  <div id="loader" class="loader">
-    <div class="loader-bg">
-      <img src="/bg-silk.jpg" alt="silk" />
-    </div>
-    <div class="loader-content">
-      <span class="loader-text">María Luz</span>
-      <div class="loader-bar">
-        <div class="loader-progress"></div>
-      </div>
-      <p class="loader-sub">Cargando una noche mágica...</p>
-    </div>
-  </div>
+<body>
 
   <div class="desktop-wrapper">
     <main class="mobile-app" id="scroll-container">
       
-      <!-- Fixed Global Background -->
+      <!-- Optimized Fixed Background without SVG Noise -->
       <div class="global-bg">
-        <img src="/bg-bokeh.jpg" alt="Magical Background" class="bokeh-img">
+        <img src="/bg-bokeh.jpg" alt="Fondo Estrellado" class="bokeh-img" loading="lazy">
         <div class="bg-gradient"></div>
-        <div class="noise-overlay"></div>
       </div>
       
       <!-- Audio -->
@@ -51,32 +28,41 @@
         <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2c52538cb4.mp3" type="audio/mpeg">
       </audio>
 
-      <!-- Fixed Controls -->
-      <button class="music-toggle" id="music-toggle" aria-label="Reproducir música">
-        <i class="ph ph-speaker-slash" id="music-icon-off"></i>
-        <i class="ph ph-speaker-high" id="music-icon" style="display: none;"></i>
+      <!-- Juicy Music Toggle -->
+      <button class="music-toggle juicy-btn" id="music-toggle" aria-label="Reproducir música">
+        <i class="ph-fill ph-speaker-slash" id="music-icon-off"></i>
+        <i class="ph-fill ph-speaker-high" id="music-icon" style="display: none;"></i>
       </button>
 
-      <!-- Floating Particles (GSAP Managed) -->
-      <div class="particles" id="particles-container"></div>
+      <!-- High-Performance CSS Particles for Hero -->
+      <div id="particles-container"></div>
 
-      <!-- HERO SECTION -->
+      <!-- REDESIGNED JUICY HERO SECTION -->
       <section class="section hero" id="hero">
         <div class="hero-image-container parallax-bg">
-          <img src="/bg-silk.jpg" alt="Silk Hero" class="hero-silk-img">
+          <img src="/bg-silk.jpg" alt="Seda azul" class="hero-silk-img" fetchpriority="high">
           <div class="hero-vignette"></div>
         </div>
         
         <div class="hero-content">
-          <div class="hero-badge split-words">Mis 15 Años</div>
-          <h1 class="hero-name split-chars">María Luz</h1>
+          <div class="hero-glass-pill juicy-element">
+            <i class="ph-fill ph-crown" style="color: #d4af37; font-size: 1.2rem;"></i>
+            <span>Mis 15 Años</span>
+          </div>
           
-          <div class="hero-bottom-info">
-            <p class="hero-date split-chars">24 OCT 2026</p>
-            <div class="scroll-indicator">
-              <span class="split-words">Desliza para descubrir</span>
-              <div class="scroll-arrow"><i class="ph ph-caret-down"></i></div>
+          <h1 class="hero-name juicy-element">María Luz</h1>
+          
+          <div class="hero-date-box juicy-element">
+            <span class="day">24</span>
+            <div class="month-year">
+              <span class="month">Octubre</span>
+              <span class="year">2026</span>
             </div>
+          </div>
+          
+          <div class="scroll-indicator juicy-element">
+            <span>Descubre mi noche mágica</span>
+            <div class="scroll-arrow"><i class="ph-bold ph-caret-down"></i></div>
           </div>
         </div>
       </section>
@@ -86,7 +72,7 @@
         <div class="stagger-item intro-box">
           <i class="ph-fill ph-quotes intro-quote-icon"></i>
           <p class="intro-text">
-            "Hay momentos inolvidables que se atesoran en el corazón para siempre, y el deseo de compartirlos con las personas que más quiero lo hace aún más especial."
+            Hay momentos inolvidables que se atesoran en el corazón para siempre, y el deseo de compartirlos con las personas que más quiero lo hace aún más especial.
           </p>
           <div class="intro-divider"></div>
         </div>
@@ -98,19 +84,19 @@
         <p class="section-subtitle stagger-item">Falta muy poco para el gran día</p>
         
         <div class="countdown-timer" id="countdown">
-          <div class="time-box stagger-item">
+          <div class="time-box stagger-item juicy-btn">
             <span class="time-number" id="days">00</span>
             <span class="time-label">Días</span>
           </div>
-          <div class="time-box stagger-item">
+          <div class="time-box stagger-item juicy-btn">
             <span class="time-number" id="hours">00</span>
             <span class="time-label">Hs</span>
           </div>
-          <div class="time-box stagger-item">
+          <div class="time-box stagger-item juicy-btn">
             <span class="time-number" id="minutes">00</span>
             <span class="time-label">Min</span>
           </div>
-          <div class="time-box stagger-item">
+          <div class="time-box stagger-item juicy-btn">
             <span class="time-number" id="seconds">00</span>
             <span class="time-label">Seg</span>
           </div>
@@ -122,13 +108,13 @@
         
         <div class="premium-card stagger-item">
           <div class="card-glow"></div>
-          <div class="card-icon"><i class="ph-fill ph-calendar-star"></i></div>
+          <div class="card-icon juicy-btn"><i class="ph-fill ph-calendar-star"></i></div>
           <div class="card-content">
             <h4>Ceremonia y Fiesta</h4>
             <p class="card-highlight">Jueves, 24 de Octubre</p>
             <p>21:30 hrs - Recepción<br>Salón de Eventos Esmeralda</p>
-            <a href="https://maps.app.goo.gl/MMp5Ywnx28wY28J49?g_st=iw" target="_blank" class="btn btn-outline">
-              <i class="ph ph-map-pin"></i> Abrir en Maps
+            <a href="https://maps.app.goo.gl/MMp5Ywnx28wY28J49?g_st=iw" target="_blank" class="btn btn-outline juicy-btn mt-3">
+              <i class="ph-bold ph-map-pin"></i> Abrir en Maps
             </a>
           </div>
         </div>
@@ -136,7 +122,7 @@
         <div class="premium-card stagger-item">
           <div class="card-glow"></div>
           <div class="dresscode-img-wrapper">
-            <img src="/dresscode.jpg" alt="Dress Code Elegante Sport">
+            <img src="/dresscode.jpg" alt="Dress Code Elegante Sport" loading="lazy">
             <div class="dresscode-img-overlay"></div>
           </div>
           <div class="card-content">
@@ -152,7 +138,7 @@
         <h3 class="section-title stagger-item">Itinerario</h3>
         <div class="timeline">
           <div class="timeline-item stagger-item">
-            <div class="timeline-dot"></div>
+            <div class="timeline-dot juicy-element"></div>
             <div class="timeline-time">21:30</div>
             <div class="timeline-content">
               <h5>Recepción</h5>
@@ -160,7 +146,7 @@
             </div>
           </div>
           <div class="timeline-item stagger-item">
-            <div class="timeline-dot"></div>
+            <div class="timeline-dot juicy-element"></div>
             <div class="timeline-time">22:30</div>
             <div class="timeline-content">
               <h5>Cena y Entrada</h5>
@@ -168,7 +154,7 @@
             </div>
           </div>
           <div class="timeline-item stagger-item">
-            <div class="timeline-dot"></div>
+            <div class="timeline-dot juicy-element"></div>
             <div class="timeline-time">00:00</div>
             <div class="timeline-content">
               <h5>Brindis y Vals</h5>
@@ -176,7 +162,7 @@
             </div>
           </div>
           <div class="timeline-item stagger-item">
-            <div class="timeline-dot"></div>
+            <div class="timeline-dot juicy-element"></div>
             <div class="timeline-time">01:00</div>
             <div class="timeline-content">
               <h5>¡A Bailar!</h5>
@@ -191,21 +177,18 @@
         <div class="premium-card spotify-card stagger-item">
           <div class="spotify-bg-blur"></div>
           
-          <div class="vinyl-container">
+          <div class="vinyl-container juicy-btn">
             <div class="vinyl-record">
               <div class="vinyl-label"><i class="ph-fill ph-music-notes"></i></div>
             </div>
-            <div class="audio-bars">
-              <span></span><span></span><span></span><span></span>
-            </div>
           </div>
 
-          <h4 style="margin-top: 1rem;">La playlist de la noche</h4>
+          <h4>La playlist de la noche</h4>
           <p>¿Qué canción no puede faltar? Buscala y agregala a nuestra lista.</p>
           
           <div class="search-box">
             <input type="text" id="song-input" placeholder="Ej: Miénteme - TINI..." autocomplete="off">
-            <button id="suggest-btn" class="btn btn-spotify">Sugerir</button>
+            <button id="suggest-btn" class="btn btn-spotify juicy-btn">Sugerir</button>
           </div>
         </div>
       </section>
@@ -214,11 +197,11 @@
       <section class="section rsvp-section">
         <div class="premium-card rsvp-card stagger-item">
           <div class="card-glow"></div>
-          <i class="ph-fill ph-envelope-open rsvp-icon"></i>
+          <i class="ph-fill ph-envelope-open rsvp-icon juicy-element"></i>
           <h3 class="section-title">Confirma tu Asistencia</h3>
           <p>Tu presencia es el mejor regalo. Por favor confirmar antes del 10 de Octubre.</p>
-          <a href="https://wa.me/5493874824080?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%2015%20de%20Mar%C3%ADa%20Luz!" target="_blank" class="btn btn-whatsapp">
-            <i class="ph-fill ph-whatsapp-logo"></i> Confirmar
+          <a href="https://wa.me/5493874824080?text=Hola,%20confirmo%20mi%20asistencia%20a%20los%2015%20de%20Mar%C3%ADa%20Luz!" target="_blank" class="btn btn-whatsapp juicy-btn">
+            <i class="ph-fill ph-whatsapp-logo"></i> Confirmar Asistencia
           </a>
         </div>
       </section>

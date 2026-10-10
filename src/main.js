@@ -6,72 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 gsap.registerPlugin(ScrollTrigger)
 
 // ----------------------------------------------------
-// Utility: Split text into spans
-// ----------------------------------------------------
-function splitText() {
-  document.querySelectorAll('.split-chars').forEach(el => {
-    const chars = el.innerText.split('');
-    el.innerHTML = chars.map(char => `<span>${char === ' ' ? '&nbsp;' : char}</span>`).join('');
-  });
-  
-  document.querySelectorAll('.split-words').forEach(el => {
-    const words = el.innerText.split(' ');
-    el.innerHTML = words.map(word => `<span>${word}</span>`).join(' ');
-  });
-}
-splitText();
-
-// ----------------------------------------------------
-// Floating Particles Generator
-// ----------------------------------------------------
-function createParticles() {
-  const container = document.getElementById('particles-container');
-  const numParticles = 20;
-
-  for (let i = 0; i < numParticles; i++) {
-    const particle = document.createElement('div');
-    particle.classList.add('particle');
-    
-    // Random size and position
-    const size = Math.random() * 4 + 2;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-    particle.style.left = `${Math.random() * 100}%`;
-    particle.style.top = `${Math.random() * 100}%`;
-    
-    container.appendChild(particle);
-
-    // Floating animation
-    gsap.to(particle, {
-      y: `random(-100, 100)`,
-      x: `random(-50, 50)`,
-      opacity: `random(0.1, 0.8)`,
-      duration: `random(5, 15)`,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
-    });
-  }
-}
-createParticles();
-
-// ----------------------------------------------------
-// Loader & Initialization Sequence
-// ----------------------------------------------------
-const loader = document.getElementById('loader');
-const body = document.body;
-
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    gsap.to(loader, { opacity: 0, duration: 1, onComplete: () => {
-      loader.style.visibility = 'hidden';
-      body.classList.remove('loading');
-      playHeroAnimation();
-    }});
-  }, 2200);
-});
-
-// ----------------------------------------------------
 // Smooth Scroll
 // ----------------------------------------------------
 const lenis = new Lenis({
@@ -94,44 +28,89 @@ gsap.ticker.lagSmoothing(0)
 lenis.on('scroll', (e) => {
   const scrolled = e.scroll;
   gsap.to('.hero-image-container', {
-    y: scrolled * 0.5,
+    y: scrolled * 0.4,
     ease: 'none',
     duration: 0
   });
 });
 
 // ----------------------------------------------------
-// GSAP Animations (Emil Kowalski / Awwwards Style)
+// High-Performance Particles
 // ----------------------------------------------------
-function playHeroAnimation() {
+function createParticles() {
+  const container = document.getElementById('particles-container');
+  // Increase particles heavily for the juicy feel requested
+  const numParticles = 40; 
+
+  for (let i = 0; i < numParticles; i++) {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    
+    // Random size and position
+    const size = Math.random() * 5 + 2;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${Math.random() * 100}%`;
+    particle.style.top = `${Math.random() * 100}%`;
+    
+    container.appendChild(particle);
+
+    // Bouncy, organic floating animation
+    gsap.to(particle, {
+      y: `random(-150, 150)`,
+      x: `random(-80, 80)`,
+      opacity: `random(0.1, 0.9)`,
+      duration: `random(4, 12)`,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
+    });
+  }
+}
+
+// ----------------------------------------------------
+// Juicy GSAP Entrance Animations
+// ----------------------------------------------------
+function playJuicyHeroAnimation() {
   const tl = gsap.timeline();
 
-  tl.fromTo('.hero-badge span', 
-    { y: 20, opacity: 0 }, 
-    { y: 0, opacity: 1, stagger: 0.1, duration: 0.8, ease: 'power2.out' }
+  // "Juicy" bouncy entrance
+  tl.fromTo('.hero-image-container', 
+    { scale: 1.2, opacity: 0 }, 
+    { scale: 1, opacity: 1, duration: 1.5, ease: 'expo.out' }
   )
-  .fromTo('.hero-name span', 
-    { y: 40, opacity: 0, rotationX: -90 }, 
-    { y: 0, opacity: 1, rotationX: 0, stagger: 0.05, duration: 1.2, ease: 'back.out(1.5)' }, '-=0.5'
+  .fromTo('.hero-glass-pill', 
+    { y: -30, opacity: 0, scale: 0.5 }, 
+    { y: 0, opacity: 1, scale: 1, duration: 1, ease: 'elastic.out(1, 0.5)' }, '-=1'
   )
-  .fromTo('.hero-date span', 
-    { opacity: 0, filter: 'blur(10px)' }, 
-    { opacity: 1, filter: 'blur(0px)', stagger: 0.05, duration: 1, ease: 'power2.out' }, '-=0.8'
+  .fromTo('.hero-name', 
+    { y: 50, opacity: 0, scale: 0.8 }, 
+    { y: 0, opacity: 1, scale: 1, duration: 1.2, ease: 'elastic.out(1, 0.6)' }, '-=0.8'
+  )
+  .fromTo('.hero-date-box', 
+    { y: 30, opacity: 0, rotation: -5 }, 
+    { y: 0, opacity: 1, rotation: 0, duration: 1, ease: 'elastic.out(1, 0.5)' }, '-=1'
   )
   .fromTo('.scroll-indicator', 
     { opacity: 0, y: 20 }, 
-    { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, '-=0.5'
+    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5'
   );
 }
 
-// Scroll Triggered Animations for all sections
+// Initialize immediately (No Loader)
+document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  playJuicyHeroAnimation();
+});
+
+// Juicy Scroll Triggered Animations for all sections
 gsap.utils.toArray('.stagger-item').forEach(item => {
   gsap.fromTo(item, 
-    { y: 60, opacity: 0, scale: 0.95 },
+    { y: 80, opacity: 0, scale: 0.9 },
     {
       y: 0, opacity: 1, scale: 1,
-      duration: 1.2,
-      ease: 'expo.out',
+      duration: 1,
+      ease: 'elastic.out(1, 0.75)',
       scrollTrigger: {
         trigger: item,
         start: 'top 85%',
@@ -175,12 +154,14 @@ let toastTimeout;
 suggestBtn.addEventListener('click', () => {
   const song = songInput.value.trim()
   if (!song) {
-    gsap.to(songInput, { x: [-8, 8, -5, 5, 0], duration: 0.4, ease: 'power2.inOut' })
+    // Juicy error shake
+    gsap.to(songInput, { x: [-10, 10, -8, 8, -5, 5, 0], duration: 0.5, ease: 'power2.inOut' })
     return
   }
   suggestBtn.innerHTML = '¡Enviada!'
+  // Juicy success bounce
   gsap.to(suggestBtn, {
-    scale: 0.95, yoyo: true, repeat: 1, duration: 0.1,
+    scale: 0.8, yoyo: true, repeat: 1, duration: 0.15, ease: 'power2.out',
     onComplete: () => {
       toast.classList.add('show')
       clearTimeout(toastTimeout)
@@ -218,5 +199,5 @@ musicToggle.addEventListener('click', () => {
     musicIconOff.style.display = 'none'
   }
   isPlaying = !isPlaying
-  gsap.fromTo(musicToggle, { scale: 0.8 }, { scale: 1, duration: 0.4, ease: 'back.out(2)' })
+  gsap.fromTo(musicToggle, { scale: 0.7 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
 })
