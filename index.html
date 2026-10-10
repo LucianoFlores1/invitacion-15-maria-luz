@@ -45,7 +45,9 @@
         <div class="bg-gradient"></div>
       </div>
       
-      <!-- YouTube API for Background Music (Tiempo de Vals) -->
+      <!-- Background Music: The Climb - Miley Cyrus -->
+      <!-- Main source: public/the-climb.mp3 (local file). Falls back to YouTube if missing. -->
+      <audio id="bg-music" src="/the-climb.mp3" loop preload="auto"></audio>
       <script src="https://www.youtube.com/iframe_api"></script>
       <div id="youtube-player" style="position: absolute; width:1px; height:1px; opacity:0; pointer-events:none;"></div>
 
