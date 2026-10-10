@@ -5,7 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Force scroll to top on load to fix mobile caching issues
 if (history.scrollRestoration) {
   history.scrollRestoration = 'manual';
 }
@@ -30,10 +29,8 @@ lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
 gsap.ticker.lagSmoothing(0)
 
-// Lock Lenis initially because of the overlay
 lenis.stop();
 
-// Parallax background sync
 lenis.on('scroll', (e) => {
   const scrolled = e.scroll;
   gsap.to('.hero-image-container', {
@@ -102,14 +99,13 @@ function playJuicyHeroAnimation() {
   );
 }
 
-// Juicy Scroll Triggered Animations
 gsap.utils.toArray('.stagger-item').forEach(item => {
   gsap.fromTo(item, 
-    { y: 80, opacity: 0, scale: 0.9 },
+    { y: 60, opacity: 0, scale: 0.95 },
     {
       y: 0, opacity: 1, scale: 1,
-      duration: 1,
-      ease: 'elastic.out(1, 0.75)',
+      duration: 1.2,
+      ease: 'power3.out',
       scrollTrigger: {
         trigger: item,
         start: 'top 85%',
@@ -119,7 +115,7 @@ gsap.utils.toArray('.stagger-item').forEach(item => {
 })
 
 // ----------------------------------------------------
-// Background Music & Entrance Overlay Logic
+// Sound Feedback & Entrance Overlay Logic
 // ----------------------------------------------------
 const musicToggle = document.getElementById('music-toggle')
 const bgMusic = document.getElementById('bg-music')
@@ -130,30 +126,59 @@ const overlay = document.getElementById('entrance-overlay')
 
 let isPlaying = false
 
+// Synthesize a magical chime sound effect offline using AudioContext
+function playMagicChime() {
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContext) return;
+  const ctx = new AudioContext();
+  
+  // Play a C Major 9 arpeggio for a magical sound
+  const notes = [523.25, 659.25, 783.99, 987.77, 1174.66]; // C5, E5, G5, B5, D6
+  
+  notes.forEach((freq, index) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    
+    const startTime = ctx.currentTime + (index * 0.08);
+    osc.start(startTime);
+    
+    gain.gain.setValueAtTime(0, startTime);
+    gain.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + 1.5);
+    
+    osc.stop(startTime + 1.5);
+  });
+}
+
 enterBtn.addEventListener('click', () => {
-  // Start Music
+  // Play the synthesized magic sound
+  playMagicChime();
+
+  // Play background music (Chopin)
   bgMusic.play().then(() => {
     isPlaying = true;
     musicIcon.style.display = 'block';
     musicIconOff.style.display = 'none';
-  }).catch(err => console.log('Autoplay blocked:', err));
+  }).catch(err => console.log('Autoplay blocked or URL failed:', err));
 
-  // Animate Wax Seal and Envelope Flap
   enterBtn.classList.add('hide');
   document.getElementById('envelope-flap').classList.add('open');
 
-  // Wait for envelope animation to finish before hiding overlay
   setTimeout(() => {
     overlay.style.opacity = '0';
     overlay.style.visibility = 'hidden';
-    document.body.style.overflow = 'auto'; // Unlock scroll
-    lenis.start(); // Unlock Lenis
+    document.body.style.overflow = 'auto'; 
+    lenis.start();
     
-    // Ensure we are at the top and play entrance animation
     window.scrollTo(0,0);
     createParticles();
     playJuicyHeroAnimation();
-  }, 1200); // 1.2s delay for the envelope to reveal content
+  }, 1200);
 })
 
 musicToggle.addEventListener('click', () => {
