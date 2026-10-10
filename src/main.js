@@ -126,14 +126,39 @@ const overlay = document.getElementById('entrance-overlay')
 let isPlaying = false
 let ytPlayer = null;
 
+// Background music: The Climb - Miley Cyrus
+// Prefer the local MP3 (public/the-climb.mp3); fall back to YouTube if it can't load.
+const YT_VIDEO_ID = 'NG2zyeVRcbs'; // The Climb - Miley Cyrus (Official Video)
+const bgMusic = document.getElementById('bg-music')
+let useLocalAudio = true
+bgMusic.volume = 0.6
+bgMusic.addEventListener('error', () => { useLocalAudio = false })
+
 window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('youtube-player', {
     height: '0',
     width: '0',
-    videoId: 'x1WJ22hHk48', // Tiempo de Vals - Chayanne
-    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': 'x1WJ22hHk48' }
+    videoId: YT_VIDEO_ID,
+    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': YT_VIDEO_ID }
   });
 };
+
+function playMusic() {
+  if (useLocalAudio) {
+    bgMusic.play().catch(() => {
+      // Local file unavailable: switch to YouTube
+      useLocalAudio = false
+      if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo()
+    })
+  } else if (ytPlayer && ytPlayer.playVideo) {
+    ytPlayer.playVideo()
+  }
+}
+
+function pauseMusic() {
+  bgMusic.pause()
+  if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo()
+}
 
 // Synthesize a magical chime sound effect offline using AudioContext
 function playMagicChime() {
@@ -168,13 +193,11 @@ enterBtn.addEventListener('click', () => {
   // Play the synthesized magic sound
   playMagicChime();
 
-  // Play YouTube background music (Tiempo de Vals)
-  if (ytPlayer && ytPlayer.playVideo) {
-    ytPlayer.playVideo();
-    isPlaying = true;
-    musicIcon.style.display = 'block';
-    musicIconOff.style.display = 'none';
-  }
+  // Play background music (The Climb - Miley Cyrus)
+  playMusic();
+  isPlaying = true;
+  musicIcon.style.display = 'block';
+  musicIconOff.style.display = 'none';
 
   enterBtn.classList.add('hide');
   document.querySelector('.tap-to-open').style.display = 'none';
@@ -194,14 +217,12 @@ enterBtn.addEventListener('click', () => {
 })
 
 musicToggle.addEventListener('click', () => {
-  if (!ytPlayer || !ytPlayer.playVideo) return;
-  
   if (isPlaying) {
-    ytPlayer.pauseVideo();
+    pauseMusic();
     musicIcon.style.display = 'none';
     musicIconOff.style.display = 'block';
   } else {
-    ytPlayer.playVideo();
+    playMusic();
     musicIcon.style.display = 'block';
     musicIconOff.style.display = 'none';
   }
