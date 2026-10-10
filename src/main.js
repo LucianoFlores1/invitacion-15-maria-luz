@@ -130,34 +130,54 @@ let ytPlayer = null;
 // Prefer the local MP3 (public/the-climb.mp3); fall back to YouTube if it can't load.
 const YT_VIDEO_ID = 'NG2zyeVRcbs'; // The Climb - Miley Cyrus (Official Video)
 const bgMusic = document.getElementById('bg-music')
-let useLocalAudio = true
+let useLocalAudio = false
+let ytReady = false
+let wantsMusic = false
 bgMusic.volume = 0.6
-bgMusic.addEventListener('error', () => { useLocalAudio = false })
+
+// Check up front whether the MP3 exists, so the choice of source is already made
+// when the guest taps. Mobile browsers only allow audio started synchronously
+// inside the tap, so we can't wait for a failed play() before falling back.
+fetch(bgMusic.dataset.src, { method: 'HEAD' })
+  .then((res) => {
+    const type = res.headers.get('content-type') || ''
+    if (res.ok && type.startsWith('audio')) {
+      useLocalAudio = true
+      bgMusic.src = bgMusic.dataset.src
+      bgMusic.load()
+    }
+  })
+  .catch(() => {})
 
 window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('youtube-player', {
-    height: '0',
-    width: '0',
+    height: '1',
+    width: '1',
     videoId: YT_VIDEO_ID,
-    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': YT_VIDEO_ID }
+    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': YT_VIDEO_ID },
+    events: {
+      onReady: () => {
+        ytReady = true
+        // Guest tapped before YouTube finished loading: start now
+        if (wantsMusic && !useLocalAudio) ytPlayer.playVideo()
+      }
+    }
   });
 };
 
 function playMusic() {
+  wantsMusic = true
   if (useLocalAudio) {
-    bgMusic.play().catch(() => {
-      // Local file unavailable: switch to YouTube
-      useLocalAudio = false
-      if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo()
-    })
-  } else if (ytPlayer && ytPlayer.playVideo) {
+    bgMusic.play().catch(() => {})
+  } else if (ytReady) {
     ytPlayer.playVideo()
   }
 }
 
 function pauseMusic() {
+  wantsMusic = false
   bgMusic.pause()
-  if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo()
+  if (ytReady) ytPlayer.pauseVideo()
 }
 
 // Synthesize a magical chime sound effect offline using AudioContext
