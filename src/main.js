@@ -189,34 +189,27 @@ const x = setInterval(function() {
 }, 1000);
 
 // ----------------------------------------------------
-// Spotify Interaction Logic
+// Copy Alias Logic
 // ----------------------------------------------------
-const songInput = document.getElementById('song-input')
-const suggestBtn = document.getElementById('suggest-btn')
+const copyAliasBtn = document.getElementById('copy-alias-btn')
 const toast = document.getElementById('toast')
 let toastTimeout;
 
-suggestBtn.addEventListener('click', () => {
-  const song = songInput.value.trim()
-  if (!song) {
-    gsap.to(songInput, { x: [-10, 10, -8, 8, -5, 5, 0], duration: 0.5, ease: 'power2.inOut' })
-    return
-  }
-  suggestBtn.innerHTML = '¡Enviada!'
-  gsap.to(suggestBtn, {
-    scale: 0.8, yoyo: true, repeat: 1, duration: 0.15, ease: 'power2.out',
-    onComplete: () => {
-      toast.classList.add('show')
-      clearTimeout(toastTimeout)
-      toastTimeout = setTimeout(() => {
-        toast.classList.remove('show')
-        suggestBtn.innerHTML = 'Sugerir'
-        songInput.value = ''
-      }, 3000)
-    }
+if (copyAliasBtn) {
+  copyAliasBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText("maria.658.1822").then(() => {
+      copyAliasBtn.innerHTML = '<i class="ph-bold ph-check"></i> ¡Copiado!'
+      gsap.to(copyAliasBtn, {
+        scale: 0.8, yoyo: true, repeat: 1, duration: 0.15, ease: 'power2.out',
+        onComplete: () => {
+          toast.classList.add('show')
+          clearTimeout(toastTimeout)
+          toastTimeout = setTimeout(() => {
+            toast.classList.remove('show')
+            copyAliasBtn.innerHTML = '<i class="ph-bold ph-copy"></i> Copiar Alias'
+          }, 3000)
+        }
+      })
+    })
   })
-})
-
-songInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') suggestBtn.click()
-})
+}

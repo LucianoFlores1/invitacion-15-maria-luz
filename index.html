@@ -211,11 +211,32 @@
           </div>
 
           <h4>La playlist de la noche</h4>
-          <p>¿Qué canción no puede faltar? Buscala y agregala a nuestra lista.</p>
+          <p>Ayudanos a armar la mejor playlist. Entrá y agregá las canciones que no pueden faltar.</p>
           
-          <div class="search-box">
-            <input type="text" id="song-input" placeholder="Ej: Miénteme - TINI..." autocomplete="off">
-            <button id="suggest-btn" class="btn btn-spotify juicy-btn">Sugerir</button>
+          <div class="search-box" style="margin-top: 1.5rem;">
+            <a href="https://open.spotify.com/playlist/1XfF804ZYoSelUoefBbgbS?si=FetWgutjRlqSX5pJhXl2ng&utm_source=whatsapp&pt=e4280c8bffceeef1502e2f028c1b228e&pi=NfKSCD2rToSZA" target="_blank" class="btn btn-spotify juicy-btn">
+              <i class="ph-fill ph-spotify-logo"></i> Agregar Canciones
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- GIFTS / REGALOS -->
+      <section class="section gift-section">
+        <div class="premium-card stagger-item">
+          <div class="card-glow"></div>
+          <div class="card-icon juicy-btn" style="color: #fff; background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent); border-color: rgba(255,255,255,0.4);">
+            <i class="ph-fill ph-gift"></i>
+          </div>
+          <div class="card-content">
+            <h4 style="font-family: var(--font-serif); font-size: 1.8rem; font-style: italic; color: var(--gold); margin-bottom: 0.5rem;">Obsequios</h4>
+            <p>Tu presencia es mi mayor regalo. Si piensas en un obsequio en la entrada habrá un cofre, o si preferís te dejo mi alias:</p>
+            <div style="background: rgba(0,0,0,0.5); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid rgba(212,175,55,0.3); font-weight: bold; color: var(--gold-light); font-size: 1.2rem; letter-spacing: 1px;">
+              maria.658.1822
+            </div>
+            <button id="copy-alias-btn" class="btn btn-outline juicy-btn">
+              <i class="ph-bold ph-copy"></i> Copiar Alias
+            </button>
           </div>
         </div>
       </section>
@@ -240,7 +261,7 @@
 
       <div class="toast" id="toast">
         <i class="ph-fill ph-check-circle toast-icon"></i>
-        <span>¡Canción enviada al DJ!</span>
+        <span id="toast-msg">¡Alias copiado!</span>
       </div>
 
     </main>
