@@ -5,6 +5,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+// Force scroll to top on load to fix mobile caching issues
+if (history.scrollRestoration) {
+  history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 // ----------------------------------------------------
 // Smooth Scroll
 // ----------------------------------------------------
@@ -24,6 +30,9 @@ lenis.on('scroll', ScrollTrigger.update)
 gsap.ticker.add((time) => lenis.raf(time * 1000))
 gsap.ticker.lagSmoothing(0)
 
+// Lock Lenis initially because of the overlay
+lenis.stop();
+
 // Parallax background sync
 lenis.on('scroll', (e) => {
   const scrolled = e.scroll;
@@ -39,14 +48,12 @@ lenis.on('scroll', (e) => {
 // ----------------------------------------------------
 function createParticles() {
   const container = document.getElementById('particles-container');
-  // Increase particles heavily for the juicy feel requested
   const numParticles = 40; 
 
   for (let i = 0; i < numParticles; i++) {
     const particle = document.createElement('div');
     particle.classList.add('particle');
     
-    // Random size and position
     const size = Math.random() * 5 + 2;
     particle.style.width = `${size}px`;
     particle.style.height = `${size}px`;
@@ -55,7 +62,6 @@ function createParticles() {
     
     container.appendChild(particle);
 
-    // Bouncy, organic floating animation
     gsap.to(particle, {
       y: `random(-150, 150)`,
       x: `random(-80, 80)`,
@@ -74,7 +80,6 @@ function createParticles() {
 function playJuicyHeroAnimation() {
   const tl = gsap.timeline();
 
-  // "Juicy" bouncy entrance
   tl.fromTo('.hero-image-container', 
     { scale: 1.2, opacity: 0 }, 
     { scale: 1, opacity: 1, duration: 1.5, ease: 'expo.out' }
@@ -97,13 +102,7 @@ function playJuicyHeroAnimation() {
   );
 }
 
-// Initialize immediately (No Loader)
-document.addEventListener('DOMContentLoaded', () => {
-  createParticles();
-  playJuicyHeroAnimation();
-});
-
-// Juicy Scroll Triggered Animations for all sections
+// Juicy Scroll Triggered Animations
 gsap.utils.toArray('.stagger-item').forEach(item => {
   gsap.fromTo(item, 
     { y: 80, opacity: 0, scale: 0.9 },
@@ -117,6 +116,52 @@ gsap.utils.toArray('.stagger-item').forEach(item => {
       }
     }
   )
+})
+
+// ----------------------------------------------------
+// Background Music & Entrance Overlay Logic
+// ----------------------------------------------------
+const musicToggle = document.getElementById('music-toggle')
+const bgMusic = document.getElementById('bg-music')
+const musicIcon = document.getElementById('music-icon')
+const musicIconOff = document.getElementById('music-icon-off')
+const enterBtn = document.getElementById('enter-btn')
+const overlay = document.getElementById('entrance-overlay')
+
+let isPlaying = false
+
+enterBtn.addEventListener('click', () => {
+  // Start Music (Now allowed because of user interaction)
+  bgMusic.play().then(() => {
+    isPlaying = true;
+    musicIcon.style.display = 'block';
+    musicIconOff.style.display = 'none';
+  }).catch(err => console.log('Autoplay blocked:', err));
+
+  // Hide overlay, enable scroll
+  overlay.style.opacity = '0';
+  overlay.style.visibility = 'hidden';
+  document.body.style.overflow = 'auto'; // Unlock scroll
+  lenis.start(); // Unlock Lenis
+  
+  // Ensure we are at the top and play entrance animation
+  window.scrollTo(0,0);
+  createParticles();
+  playJuicyHeroAnimation();
+})
+
+musicToggle.addEventListener('click', () => {
+  if (isPlaying) {
+    bgMusic.pause()
+    musicIcon.style.display = 'none'
+    musicIconOff.style.display = 'block'
+  } else {
+    bgMusic.play()
+    musicIcon.style.display = 'block'
+    musicIconOff.style.display = 'none'
+  }
+  isPlaying = !isPlaying
+  gsap.fromTo(musicToggle, { scale: 0.7 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
 })
 
 // ----------------------------------------------------
@@ -154,12 +199,10 @@ let toastTimeout;
 suggestBtn.addEventListener('click', () => {
   const song = songInput.value.trim()
   if (!song) {
-    // Juicy error shake
     gsap.to(songInput, { x: [-10, 10, -8, 8, -5, 5, 0], duration: 0.5, ease: 'power2.inOut' })
     return
   }
   suggestBtn.innerHTML = '¡Enviada!'
-  // Juicy success bounce
   gsap.to(suggestBtn, {
     scale: 0.8, yoyo: true, repeat: 1, duration: 0.15, ease: 'power2.out',
     onComplete: () => {
@@ -176,28 +219,4 @@ suggestBtn.addEventListener('click', () => {
 
 songInput.addEventListener('keypress', (e) => {
   if (e.key === 'Enter') suggestBtn.click()
-})
-
-// ----------------------------------------------------
-// Background Music Logic
-// ----------------------------------------------------
-const musicToggle = document.getElementById('music-toggle')
-const bgMusic = document.getElementById('bg-music')
-const musicIcon = document.getElementById('music-icon')
-const musicIconOff = document.getElementById('music-icon-off')
-
-let isPlaying = false
-
-musicToggle.addEventListener('click', () => {
-  if (isPlaying) {
-    bgMusic.pause()
-    musicIcon.style.display = 'none'
-    musicIconOff.style.display = 'block'
-  } else {
-    bgMusic.play()
-    musicIcon.style.display = 'block'
-    musicIconOff.style.display = 'none'
-  }
-  isPlaying = !isPlaying
-  gsap.fromTo(musicToggle, { scale: 0.7 }, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' })
 })

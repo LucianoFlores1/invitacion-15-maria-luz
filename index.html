@@ -14,24 +14,39 @@
 </head>
 <body>
 
+  <!-- TAP TO ENTER OVERLAY (Fixes Autoplay & Scroll Issue) -->
+  <div id="entrance-overlay" class="entrance-overlay">
+    <div class="entrance-content">
+      <h1 class="entrance-name">María Luz</h1>
+      <p class="entrance-subtitle">Te invito a mis 15 años</p>
+      <button id="enter-btn" class="btn btn-outline juicy-btn mt-3">
+        <i class="ph-fill ph-envelope-open"></i> Abrir Invitación
+      </button>
+    </div>
+  </div>
+
   <div class="desktop-wrapper">
     <main class="mobile-app" id="scroll-container">
       
-      <!-- Optimized Fixed Background without SVG Noise -->
+      <!-- CSS ONLY MAGICAL BACKGROUND (Replaces Pixelated Image) -->
       <div class="global-bg">
-        <img src="/bg-bokeh.jpg" alt="Fondo Estrellado" class="bokeh-img" loading="lazy">
+        <div class="stars-layer-1"></div>
+        <div class="stars-layer-2"></div>
+        <div class="stars-layer-3"></div>
+        <div class="glow-orb orb-top"></div>
+        <div class="glow-orb orb-bottom"></div>
         <div class="bg-gradient"></div>
       </div>
       
-      <!-- Audio -->
+      <!-- Audio (Classic Waltz or 15th Birthday Pop) -->
       <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/10/25/audio_2c52538cb4.mp3" type="audio/mpeg">
+        <source src="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=waltz-of-the-flowers-8291.mp3" type="audio/mpeg">
       </audio>
 
       <!-- Juicy Music Toggle -->
       <button class="music-toggle juicy-btn" id="music-toggle" aria-label="Reproducir música">
-        <i class="ph-fill ph-speaker-slash" id="music-icon-off"></i>
-        <i class="ph-fill ph-speaker-high" id="music-icon" style="display: none;"></i>
+        <i class="ph-fill ph-speaker-slash" id="music-icon-off" style="display: none;"></i>
+        <i class="ph-fill ph-speaker-high" id="music-icon"></i>
       </button>
 
       <!-- High-Performance CSS Particles for Hero -->
@@ -121,7 +136,22 @@
 
         <div class="premium-card stagger-item dresscode-card">
           <div class="card-glow"></div>
-          <div class="card-icon juicy-btn"><i class="ph-fill ph-coat-hanger"></i></div>
+          <div class="card-icon juicy-btn" style="width: 90px; height: 90px;">
+            <!-- Custom Vector Icon for Tuxedo & Dress -->
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color: #d4af37;">
+              <!-- Dress -->
+              <path d="M14 4 L19 12 L22 22 L11 22 L14 12 Z" fill="rgba(212,175,55,0.2)"/>
+              <path d="M14 4 L16.5 8 L19 4 Z" fill="rgba(212,175,55,0.4)"/>
+              <!-- Tuxedo -->
+              <rect x="2" y="10" width="10" height="12" rx="1" fill="rgba(255,255,255,0.1)"/>
+              <path d="M2 10 L7 16 L12 10" stroke="#d4af37"/>
+              <path d="M7 16 L7 22"/>
+              <!-- Bowtie -->
+              <path d="M5 8 L9 8 L9 10 L5 10 Z" fill="#d4af37"/>
+              <path d="M3 7 L5 8.5 L3 10 Z" fill="#d4af37"/>
+              <path d="M11 7 L9 8.5 L11 10 Z" fill="#d4af37"/>
+            </svg>
+          </div>
           <div class="card-content">
             <h4>Dress Code</h4>
             <p class="card-highlight">Elegante Sport</p>
