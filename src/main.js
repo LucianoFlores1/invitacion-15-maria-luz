@@ -177,6 +177,7 @@ enterBtn.addEventListener('click', () => {
   }
 
   enterBtn.classList.add('hide');
+  document.querySelector('.tap-to-open').style.display = 'none';
   document.getElementById('envelope-flap').classList.add('open');
 
   setTimeout(() => {
