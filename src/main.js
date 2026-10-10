@@ -180,6 +180,7 @@ enterBtn.addEventListener('click', () => {
   document.getElementById('envelope-flap').classList.add('open');
 
   setTimeout(() => {
+    document.querySelector('.envelope-container').style.display = 'none';
     overlay.style.opacity = '0';
     overlay.style.visibility = 'hidden';
     document.body.style.overflow = 'auto'; 

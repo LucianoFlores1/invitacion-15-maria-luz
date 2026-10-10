@@ -187,8 +187,8 @@ body { font-family: var(--font-sans); background-color: var(--blue-dark); color:
 .btn-spotify { background: linear-gradient(135deg, #1DB954, #1aa34a); color: #fff; box-shadow: 0 8px 20px rgba(29, 185, 84, 0.4), inset 0 2px 0 rgba(255,255,255,0.3); }
 
 /* FOOTER */
-.footer { padding: 2rem 1.5rem 6rem; text-align: center; background: #010409; }
-.footer-thanks { font-family: var(--font-script); color: #fff; font-size: 2.5rem; margin-bottom: 0.2rem; font-weight: 400; opacity: 1 !important; transform: none !important; }
+.footer { padding: 2rem 1.5rem 6rem; text-align: center; background: transparent; position: relative; z-index: 10; }
+.footer-thanks { font-family: var(--font-script); color: #fff; font-size: 2.5rem; margin-bottom: 0.2rem; font-weight: 400; opacity: 1 !important; transform: none !important; position: relative; z-index: 20; display: block; }
 .footer-name { 
   font-family: var(--font-script); font-size: 4.5rem; color: var(--gold); line-height: 1; 
   text-shadow: 0 5px 20px rgba(212,175,55,0.2); 
