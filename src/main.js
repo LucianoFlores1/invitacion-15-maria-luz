@@ -130,8 +130,8 @@ window.onYouTubeIframeAPIReady = function() {
   ytPlayer = new YT.Player('youtube-player', {
     height: '0',
     width: '0',
-    videoId: 'HPI3mzpqd2g', // The Climb - Miley Cyrus (Lyrics)
-    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': 'HPI3mzpqd2g' }
+    videoId: 'x1WJ22hHk48', // Tiempo de Vals - Chayanne
+    playerVars: { 'autoplay': 0, 'controls': 0, 'playsinline': 1, 'loop': 1, 'playlist': 'x1WJ22hHk48' }
   });
 };
 
